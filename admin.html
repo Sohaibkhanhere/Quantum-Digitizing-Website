@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quantum Admin — Control Center</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    .admin-layout { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+    
+    /* ── SIDEBAR ── */
+    aside { background: var(--bg2); border-right: 1px solid var(--border); padding: 40px; }
+    .side-logo { font-family: var(--fb); font-size: 24px; letter-spacing: 4px; color: var(--white); margin-bottom: 60px; display: block; text-decoration: none; }
+    .side-nav { display: flex; flex-direction: column; gap: 12px; }
+    .side-link { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--steel); text-decoration: none; padding: 12px 20px; border: 1px solid transparent; transition: all .3s; }
+    .side-link:hover, .side-link.active { background: rgba(244,168,80,0.05); border-color: var(--border); color: var(--gold); }
+    
+    /* ── MAIN CONTENT ── */
+    main { padding: 60px; background: var(--bg); }
+    .panel-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 48px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+    .panel-title h2 { font-family: var(--fb); font-size: 48px; letter-spacing: 2px; line-height: 1; }
+    
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px; }
+    .admin-stat-box { background: var(--bg2); border: 1px solid var(--border); padding: 24px; }
+    .admin-stat-val { font-family: var(--fb); font-size: 36px; color: var(--gold); line-height: 1; display: block; }
+    .admin-stat-lbl { font-family: var(--fm); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-top: 4px; }
+
+    /* ── DATA TABLE ── */
+    .admin-table-wrap { background: var(--bg2); border: 1px solid var(--border); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 16px 24px; background: var(--bg3); font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); border-bottom: 1px solid var(--border); }
+    td { padding: 16px 24px; border-bottom: 1px solid var(--border); font-family: var(--fr); font-size: 14px; color: var(--silver); }
+    tr:last-child td { border-bottom: none; }
+    .status-badge { font-family: var(--fm); font-size: 8px; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; }
+    .badge-Pending { background: #f4a85022; color: var(--gold); }
+    .badge-Completed { background: #4ade8022; color: #4ade80; }
+    
+    .action-btn { background: none; border: 1px solid var(--border2); color: var(--steel); padding: 6px 12px; font-family: var(--fm); font-size: 8px; cursor: pointer; transition: all .2s; }
+    .action-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* Login Screen Overlays */
+    #loginOverlay { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; }
+    .login-box { width: 100%; max-width: 400px; padding: 48px; background: var(--bg2); border: 1px solid var(--border); text-align: center; }
+  </style>
+</head>
+<body class="admin-body">
+  <div id="loginOverlay">
+    <div class="login-box">
+      <div class="side-logo">
+        <img src="pictures/Quantum_digitizing_Logo.png" alt="Quantum Admin" style="height: 60px; width: auto; object-fit: contain;">
+      </div>
+      <div class="field">
+        <label>Admin Key</label>
+        <input type="password" id="adminKey" placeholder="Enter secure key..."/>
+      </div>
+      <button class="btn-primary w-100" onclick="checkAdmin()"><span>Access Panel →</span></button>
+    </div>
+  </div>
+
+  <div class="admin-layout" id="adminPanel" style="display:none">
+    <aside>
+      <a href="index.html" class="side-logo">
+        <img src="pictures/Quantum_digitizing_Logo.png" alt="Quantum Admin" style="height: 40px; width: auto; object-fit: contain;">
+      </a>
+      <nav class="side-nav">
+        <a href="#" class="side-link active" onclick="showTab('orders')">📦 Orders</a>
+        <a href="#" class="side-link" onclick="showTab('products')">🏷️ Products</a>
+        <a href="#" class="side-link" onclick="showTab('portfolio')">🖼️ Portfolio</a>
+        <a href="#" class="side-link" onclick="showTab('settings')">⚙️ Settings</a>
+        <a href="#" class="side-link" style="margin-top:auto; color:#ef4444" onclick="location.reload()">Logout</a>
+      </nav>
+    </aside>
+
+    <main>
+      <div id="tab-orders">
+        <div class="panel-header">
+          <div class="panel-title">
+            <h2 class="gold">ORDERS</h2>
+            <p class="admin-stat-lbl">Manage all customer requests</p>
+          </div>
+          <button class="btn-secondary" onclick="loadAdminOrders()"><span>⟳ Refresh</span></button>
+        </div>
+
+        <div class="stats-row">
+          <div class="admin-stat-box"><span class="admin-stat-val" id="admTotal">0</span><span class="admin-stat-lbl">Total Orders</span></div>
+          <div class="admin-stat-box"><span class="admin-stat-val" id="admRevenue">$0</span><span class="admin-stat-lbl">Total Revenue</span></div>
+          <div class="admin-stat-box"><span class="admin-stat-val" id="admPending">0</span><span class="admin-stat-lbl">Pending Tasks</span></div>
+          <div class="admin-stat-box"><span class="admin-stat-val" id="admUsers">0</span><span class="admin-stat-lbl">Active Users</span></div>
+        </div>
+
+        <div class="admin-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Type</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminOrdersBody">
+              <!-- Orders load here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-config.js"></script>
+  <script>
+    const SECURE_KEY = 'QuantumAdmin2025'; // This should normally be in Supabase or an environment variable
+
+    function checkAdmin() {
+      const key = document.getElementById('adminKey').value;
+      if (key === SECURE_KEY) {
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'grid';
+        loadAdminOrders();
+        loadGlobalStats();
+      } else {
+        QD.showToast('Invalid Admin Key', 'error');
+      }
+    }
+
+    async function loadAdminOrders() {
+      const { data: orders, error } = await QD.supabase
+        .from('orders')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) return QD.showToast(error.message, 'error');
+      
+      const body = document.getElementById('adminOrdersBody');
+      body.innerHTML = orders.map(o => `
+        <tr>
+          <td><span class="order-id">#${o.id.slice(-8).toUpperCase()}</span></td>
+          <td>${o.customer_name}<br/><small>${o.customer_email}</small></td>
+          <td>${o.service_type || o.order_type}</td>
+          <td><strong>$${parseFloat(o.total_price).toFixed(2)}</strong></td>
+          <td><span class="status-badge badge-${o.status}">${o.status}</span></td>
+          <td>${new Date(o.created_at).toLocaleDateString()}</td>
+          <td>
+            <button class="action-btn" onclick="updateStatus('${o.id}', 'Completed')">Complete</button>
+            <button class="action-btn" onclick="updateStatus('${o.id}', 'Cancelled')">Cancel</button>
+          </td>
+        </tr>
+      `).join('');
+
+      document.getElementById('admTotal').textContent = orders.length;
+      document.getElementById('admPending').textContent = orders.filter(o => o.status === 'Pending').length;
+      const rev = orders.reduce((sum, o) => sum + parseFloat(o.total_price), 0);
+      document.getElementById('admRevenue').textContent = `$${rev.toFixed(0)}`;
+    }
+
+    async function loadGlobalStats() {
+      const { count: userCount } = await QD.supabase.from('profiles').select('*', { count: 'exact', head: true });
+      document.getElementById('admUsers').textContent = userCount || 0;
+    }
+
+    async function updateStatus(id, status) {
+      const { error } = await QD.supabase.from('orders').update({ status }).eq('id', id);
+      if (error) QD.showToast(error.message, 'error');
+      else {
+        QD.showToast(`Order marked as ${status}`);
+        loadAdminOrders();
+      }
+    }
+
+    function showTab(tab) {
+      QD.showToast('Tab switching feature coming soon!', 'success');
+    }
+  </script>
+</body>
+</html>

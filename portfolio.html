@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio — Embroidery Digitizing Work & Custom Patches | Quantum Digitizing</title>
+  <meta name="description" content="View Quantum Digitizing's portfolio of embroidery digitizing, vector art conversion, custom patches and apparel work. Premium quality showcased in every piece.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://www.quantumdigitizing.com/portfolio.html">
+  <meta property="og:title" content="Portfolio — Quantum Digitizing Work">
+  <meta property="og:description" content="Browse our embroidery digitizing, vector art and custom patch portfolio.">
+  <meta property="og:url" content="https://www.quantumdigitizing.com/portfolio.html">
+  <meta property="og:image" content="https://www.quantumdigitizing.com/pictures/Quantum_digitizing_Logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    .port-hero {
+      padding: 180px 0 80px;
+      text-align: center;
+      background: radial-gradient(circle at center, rgba(244, 168, 80, 0.03), transparent 70%);
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-bar {
+      position: sticky;
+      top: 72px;
+      z-index: 100;
+      background: rgba(11, 15, 20, 0.9);
+      backdrop-filter: blur(20px);
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .filter-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+    .filter-btn {
+      background: var(--glass);
+      border: 1px solid var(--border);
+      color: var(--white);
+      padding: 8px 24px;
+      font-family: var(--fm);
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .filter-btn.active, .filter-btn:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(244, 168, 80, 0.05);
+    }
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 60px 0;
+    }
+    .portfolio-item {
+      position: relative;
+      aspect-ratio: 1;
+      overflow: hidden;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      cursor: pointer;
+    }
+    .portfolio-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .portfolio-item:hover img {
+      transform: scale(1.1);
+    }
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 25px;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .portfolio-item:hover .portfolio-overlay {
+      opacity: 1;
+    }
+    .portfolio-cat {
+      font-family: var(--fm);
+      font-size: 10px;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 5px;
+    }
+    .portfolio-name {
+      font-family: var(--fb);
+      font-size: 24px;
+      color: var(--white);
+      letter-spacing: 1px;
+    }
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+    .lightbox.show {
+      display: flex;
+    }
+    .lightbox-content {
+      max-width: 90%;
+      max-height: 90%;
+      position: relative;
+    }
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      border: 1px solid var(--border);
+    }
+    .lightbox-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--white);
+      font-size: 30px;
+      cursor: pointer;
+    }
+    .lightbox-info {
+      margin-top: 20px;
+      text-align: center;
+    }
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:16px 60px;transition:background .4s,padding .4s;border-bottom:1px solid transparent;}
+    nav.scrolled{background:rgba(21,28,36,.96);backdrop-filter:blur(20px);border-bottom-color:rgba(244,168,80,.08);}
+    .nav-logo{display:flex;align-items:center;text-decoration:none;}
+    .nav-links{display:flex;gap:28px;align-items:center;}
+    .nav-link{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--steel);text-decoration:none;transition:color .2s;position:relative;}
+    .nav-link:hover,.nav-link.active{color:var(--white);}
+    .nav-auth{display:flex;gap:10px;align-items:center;}
+    .nav-ghost{font-family:var(--fm);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--steel);background:none;border:1px solid rgba(244,168,80,.16);padding:8px 16px;cursor:pointer;text-decoration:none;transition:all .2s;display:inline-block;}
+    .nav-ghost:hover{border-color:var(--gold);color:var(--gold);}
+    .ham-btn{display:none;flex-direction:column;justify-content:center;gap:5px;width:36px;height:36px;background:none;border:1px solid rgba(244,168,80,.16);padding:8px;cursor:pointer;}
+    .ham-btn span{display:block;width:100%;height:1px;background:var(--white);transition:transform .3s,opacity .3s;}
+    .ham-btn.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
+    .ham-btn.open span:nth-child(2){opacity:0;}
+    .ham-btn.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
+    .mob-menu{position:fixed;inset:0;background:rgba(21,28,36,.98);backdrop-filter:blur(24px);z-index:550;display:flex;flex-direction:column;padding:100px 32px 40px;transform:translateX(100%);transition:transform .4s cubic-bezier(.76,0,.24,1);overflow-y:auto;}
+    .mob-menu.open{transform:translateX(0);}
+    .mob-link{font-family:var(--fb);font-size:36px;letter-spacing:3px;color:var(--white);text-decoration:none;padding:14px 0;border-bottom:1px solid rgba(244,168,80,.08);display:block;transition:color .2s;}
+    .mob-link:hover{color:var(--gold);}
+    /* CURSOR */
+    .cursor{position:fixed;width:6px;height:6px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+    .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(244,168,80,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .25s,height .25s;}
+    /* SECTION */
+    .section-title{font-family:var(--fb);font-size:clamp(48px,8vw,100px);line-height:.88;letter-spacing:3px;margin-bottom:16px;}
+    .section-sub{font-family:var(--fr);font-size:17px;color:var(--steel);line-height:1.7;}
+    .label-row{display:flex;align-items:center;gap:20px;font-family:var(--fm);font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:40px;}
+    .label-row::after{content:'';flex:1;height:1px;background:rgba(244,168,80,.08);}
+    .label-num{color:rgba(58,60,72,1);margin-right:4px;}
+    /* FOOTER */
+    footer{border-top:1px solid rgba(244,168,80,.08);padding:60px;background:#0e151d;}
+    .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+    .footer-brand-name{font-family:var(--fb);font-size:clamp(28px,3vw,44px);color:transparent;-webkit-text-stroke:1px rgba(244,168,80,.28);letter-spacing:2px;line-height:1;margin-bottom:14px;}
+    .footer-desc{font-family:var(--fr);font-size:14px;color:var(--steel);line-height:1.7;margin-bottom:16px;}
+    .footer-col-title{font-family:var(--fm);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+    .footer-col-link{display:block;font-family:var(--fr);font-size:14px;color:var(--steel);text-decoration:none;margin-bottom:10px;transition:color .2s;}
+    .footer-col-link:hover{color:var(--white);}
+    .footer-bottom{border-top:1px solid rgba(244,168,80,.08);padding-top:20px;display:flex;justify-content:space-between;align-items:center;}
+    .footer-copy{font-family:var(--fm);font-size:8px;letter-spacing:1px;color:rgba(58,60,72,1);}
+    @media(max-width:900px){
+      nav{padding:12px 20px;}
+      .nav-links,.nav-auth{display:none !important;}
+      .ham-btn{display:flex !important;}
+      .footer-grid{grid-template-columns:1fr;}
+      .portfolio-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;padding:32px 0;}
+      .filter-bar{top:60px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" id="cur"></div>
+  <div class="cursor-ring" id="cur-ring"></div>
+
+  <!-- NAV -->
+  <nav id="mainNav">
+    <a href="index.html" class="nav-logo">
+      <img src="pictures/Quantum_digitizing_Logo.png" alt="Quantum Digitizing" style="height: 50px; width: auto; object-fit: contain;">
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="shop.html" class="nav-link">Shop</a>
+      <a href="portfolio.html" class="nav-link active">Portfolio</a>
+      <div class="nav-auth">
+        <a href="auth.html" class="nav-ghost">Sign In</a>
+      </div>
+    </div>
+    <button class="ham-btn" id="hamBtn"><span></span><span></span><span></span></button>
+  </nav>
+
+  <section class="port-hero">
+    <div class="container">
+      <div class="label-row" style="justify-content: center;"><span class="label-num">02 /</span> Mastery</div>
+      <h1 class="section-title">OUR <em>PORTFOLIO</em></h1>
+      <p class="section-sub">A showcase of precision digitizing, custom patches, and exquisite apparel work.</p>
+    </div>
+  </section>
+
+  <div class="filter-bar">
+    <div class="container">
+      <div class="filter-tabs" id="filterTabs">
+        <button class="filter-btn active" data-filter="all">All Work</button>
+        <!-- Categories injected here -->
+      </div>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="portfolio-grid" id="portfolioGrid">
+      <!-- Portfolio items injected here -->
+    </div>
+  </main>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lbClose">&times;</button>
+      <img src="" alt="" class="lightbox-img" id="lbImg">
+      <div class="lightbox-info">
+        <div class="portfolio-cat" id="lbCat"></div>
+        <div class="portfolio-name" id="lbName"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand-name">QUANTUM<br/>DIGITIZING</div>
+        <p class="footer-desc">Excellence in every stitch. Transforming your vision into high-fidelity physical and digital art.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Quick Links</div>
+        <a href="index.html" class="footer-col-link">Home</a>
+        <a href="shop.html" class="footer-col-link">Shop</a>
+        <a href="portfolio.html" class="footer-col-link">Portfolio</a>
+      </div>
+      <div>
+        <div class="footer-col-title">Contact</div>
+        <a href="#" class="footer-col-link">📱 +92 335 233 5961</a>
+        <a href="#" class="footer-col-link">📧 sales@quantumdigitizing.com</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2025 Quantum Digitizing — All rights reserved</span>
+      <div class="footer-social" style="display:flex;gap:12px;margin-top:10px;">
+          <a href="https://wa.me/923352335961" target="_blank" style="color:var(--steel)">WhatsApp</a>
+          <a href="https://instagram.com/quantumdigitizing" target="_blank" style="color:var(--steel)">Instagram</a>
+          <a href="https://facebook.com/quantumdigitizing" target="_blank" style="color:var(--steel)">Facebook</a>
+          <a href="https://www.tiktok.com/@quantumdigitizing" target="_blank" style="color:var(--steel)">TikTok</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.42.0/dist/umd/supabase.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      initCursor();
+      checkAuth();
+      loadPortfolio();
+      initLightbox();
+    });
+
+    function initCursor() {
+      if (!window.matchMedia('(pointer:fine)').matches) return;
+      const cur = document.getElementById('cur'), ring = document.getElementById('cur-ring');
+      let cx = 0, cy = 0, rx = 0, ry = 0;
+      document.addEventListener('mousemove', e => { cx = e.clientX; cy = e.clientY; cur.style.left = cx + 'px'; cur.style.top = cy + 'px'; });
+      (function lp() { rx += (cx - rx) * .1; ry += (cy - ry) * .1; ring.style.left = rx + 'px'; ring.style.top = ry + 'px'; requestAnimationFrame(lp); })();
+    }
+
+    async function checkAuth() {
+      const { data: { session } } = await QD.supabase.auth.getSession();
+      if (session) {
+        document.querySelector('.nav-auth').innerHTML = `
+          <a href="orders.html" class="nav-ghost">Dashboard</a>
+          <button class="nav-link" onclick="QD.supabase.auth.signOut(); location.reload();" style="background:none;border:none;color:var(--white);cursor:pointer;">Sign Out</button>
+        `;
+      }
+    }
+
+    async function loadPortfolio() {
+      try {
+        const { data: portfolio, error } = await QD.supabase
+          .from('portfolio').select('*').order('created_at', { ascending: false });
+
+        if (error || !portfolio || portfolio.length === 0) {
+          showDemoPortfolio(); return;
+        }
+
+        const grid = document.getElementById('portfolioGrid');
+        const tabs = document.getElementById('filterTabs');
+        const categories = [...new Set(portfolio.map(item => item.category))];
+        
+        categories.forEach(cat => {
+          const btn = document.createElement('button');
+          btn.className = 'filter-btn'; btn.textContent = cat;
+          btn.dataset.filter = cat; btn.setAttribute('aria-label', `Filter by ${cat}`);
+          btn.onclick = () => filterWork(cat, btn);
+          tabs.appendChild(btn);
+        });
+
+        window.portfolioData = portfolio;
+        renderPortfolio(portfolio);
+      } catch(e) { showDemoPortfolio(); }
+    }
+
+    function showDemoPortfolio() {
+      const demoItems = [
+        { title:'Cap Logo Digitizing', category:'Digitizing', image_url:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=85', description:'Structured cap with left-chest logo digitized for Brother machine.' },
+        { title:'Jacket Back Design', category:'Digitizing', image_url:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=85', description:'Large back piece digitized with 85,000 stitches for varsity jacket.' },
+        { title:'Company Logo Vector', category:'Vector', image_url:'https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?w=600&q=85', description:'Clean vector recreation from low-res JPEG for print & embroidery.' },
+        { title:'Sports Team Patch', category:'Patches', image_url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=85', description:'Custom 3" embroidered patch with Velcro backing for sports uniforms.' },
+        { title:'Polo Shirt Embroidery', category:'Apparel', image_url:'https://images.unsplash.com/photo-1503341338985-95ad5a5e6949?w=600&q=85', description:'Corporate polo with small left-chest embroidered logo, 5,000 stitches.' },
+        { title:'Military Unit Insignia', category:'Patches', image_url:'https://images.unsplash.com/photo-1574120235036-cbeec83d4b50?w=600&q=85', description:'Complex military insignia digitized with metallic threads.' },
+        { title:'Brand Logo Redraw', category:'Vector', image_url:'https://images.unsplash.com/photo-1558618047-f5d0ed6e3879?w=600&q=85', description:'Full vector recreation in AI and EPS from a hand-drawn sketch.' },
+        { title:'Hoodie Brand Design', category:'Apparel', image_url:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=85', description:'Front & back design for streetwear brand, embroidered on premium hoodie.' },
+        { title:'School Logo Digitizing', category:'Digitizing', image_url:'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=85', description:'School crest digitized for staff uniform shirts with fine detail.' },
+      ];
+
+      const grid = document.getElementById('portfolioGrid');
+      const tabs = document.getElementById('filterTabs');
+      const cats = [...new Set(demoItems.map(i => i.category))];
+
+      cats.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn'; btn.textContent = cat;
+        btn.dataset.filter = cat; btn.setAttribute('aria-label', `Filter by ${cat}`);
+        btn.onclick = () => filterWork(cat, btn);
+        tabs.appendChild(btn);
+      });
+
+      window.portfolioData = demoItems;
+      renderPortfolio(demoItems);
+    }
+
+    function renderPortfolio(items) {
+      const grid = document.getElementById('portfolioGrid');
+      grid.innerHTML = '';
+      if (!items || items.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:80px 0;">
+          <p style="font-family:var(--fr);font-size:18px;color:var(--steel);">No items in this category.</p>
+        </div>`; return;
+      }
+      items.forEach((item, idx) => {
+        const div = document.createElement('article');
+        div.className = 'portfolio-item';
+        div.setAttribute('aria-label', item.title);
+        div.innerHTML = `
+          <img src="${item.image_url}" alt="${item.title} — ${item.category} by Quantum Digitizing" loading="lazy">
+          <div class="portfolio-overlay">
+            <div class="portfolio-cat">${item.category}</div>
+            <div class="portfolio-name">${item.title}</div>
+          </div>
+        `;
+        div.onclick = () => openLightbox(item);
+        grid.appendChild(div);
+        gsap.from(div, { opacity: 0, y: 30, delay: idx * 0.05, duration: 0.8 });
+      });
+    }
+
+    function filterWork(cat, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filtered = cat === 'all' ? window.portfolioData : window.portfolioData.filter(i => i.category === cat);
+      renderPortfolio(filtered);
+    }
+
+    function initLightbox() {
+      const lb = document.getElementById('lightbox');
+      const close = document.getElementById('lbClose');
+      close.onclick = () => lb.classList.remove('show');
+      lb.onclick = (e) => { if (e.target === lb) lb.classList.remove('show'); };
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('show'); });
+    }
+
+    function openLightbox(item) {
+      const lb = document.getElementById('lightbox');
+      document.getElementById('lbImg').src = item.image_url;
+      document.getElementById('lbImg').alt = item.title;
+      document.getElementById('lbCat').textContent = item.category;
+      document.getElementById('lbName').textContent = item.title;
+      lb.classList.add('show');
+    }
+
+    const hamBtn = document.getElementById('hamBtn'), mobMenu = document.getElementById('mobMenu');
+    if(hamBtn) hamBtn.addEventListener('click', () => {
+      hamBtn.classList.toggle('open');
+      mobMenu.classList.toggle('open');
+      document.body.style.overflow = mobMenu.classList.contains('open') ? 'hidden' : '';
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quantum Digitizing — Sign In / Join</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+    .auth-container {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      padding: 48px;
+      position: relative;
+      z-index: 2;
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .auth-logo {
+      font-family: var(--fb);
+      font-size: 32px;
+      letter-spacing: 4px;
+      text-decoration: none;
+      color: var(--white);
+      margin-bottom: 12px;
+      display: block;
+    }
+    .auth-tabs {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border);
+    }
+    .auth-tab {
+      font-family: var(--fm);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--steel);
+      padding: 12px 0;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all .3s;
+    }
+    .auth-tab.active {
+      color: var(--gold);
+      border-bottom-color: var(--gold);
+    }
+    .auth-form {
+      display: none;
+    }
+    .auth-form.active {
+      display: block;
+    }
+    .auth-btn {
+      width: 100%;
+      margin-top: 12px;
+    }
+    .auth-switch {
+      text-align: center;
+      margin-top: 24px;
+      font-family: var(--fm);
+      font-size: 9px;
+      letter-spacing: 1px;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+    .auth-switch span {
+      color: var(--gold);
+      cursor: pointer;
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="bg-canvas"></canvas>
+  
+  <div class="auth-container">
+    <div class="auth-header">
+      <a href="index.html" class="auth-logo">
+        <img src="pictures/Quantum_digitizing_Logo.png" alt="Quantum Digitizing" style="height: 60px; width: auto; object-fit: contain;">
+      </a>
+      <div class="auth-tabs">
+        <div class="auth-tab active" id="tabSignin" onclick="switchTab('signin')">Sign In</div>
+        <div class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Join Now</div>
+      </div>
+    </div>
+
+    <!-- SIGN IN -->
+    <div class="auth-form active" id="formSignin">
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="siEmail" placeholder="you@example.com"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="siPassword" placeholder="••••••••"/>
+      </div>
+      <button class="btn-primary auth-btn" id="signinBtn" onclick="doSignIn()"><span>Sign In →</span></button>
+      <div class="auth-switch">Forgot password? <span onclick="showReset()">Reset</span></div>
+    </div>
+
+    <!-- SIGN UP -->
+    <div class="auth-form" id="formSignup">
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" id="suName" placeholder="John Smith"/>
+      </div>
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="suEmail" placeholder="you@example.com"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="suPassword" placeholder="Min. 8 characters"/>
+      </div>
+      <button class="btn-primary auth-btn" id="signupBtn" onclick="doSignUp()"><span>Create Account →</span></button>
+    </div>
+
+    <!-- RESET -->
+    <div class="auth-form" id="formReset">
+      <div class="field">
+        <label>Email Address</label>
+        <input type="email" id="resetEmail" placeholder="you@example.com"/>
+      </div>
+      <button class="btn-primary auth-btn" onclick="doReset()"><span>Send Reset Link →</span></button>
+      <div class="auth-switch">Back to <span onclick="switchTab('signin')">Sign In</span></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.42.0/dist/umd/supabase.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ── TABS ──
+    function switchTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      if (tab === 'signin') {
+        document.getElementById('tabSignin').classList.add('active');
+        document.getElementById('formSignin').classList.add('active');
+      } else {
+        document.getElementById('tabSignup').classList.add('active');
+        document.getElementById('formSignup').classList.add('active');
+      }
+    }
+    function showReset() {
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      document.getElementById('formReset').classList.add('active');
+    }
+
+    // ── AUTH ACTIONS ──
+    async function doSignIn() {
+      if (!QD.supabase) return QD.showToast('Connection issue. Please refresh the page.', 'error');
+      const email = document.getElementById('siEmail').value;
+      const password = document.getElementById('siPassword').value;
+      if (!email || !password) return QD.showToast('Please fill all fields', 'error');
+
+      const btn = document.getElementById('signinBtn');
+      btn.disabled = true; btn.querySelector('span').textContent = 'Signing in...';
+
+      try {
+        const { data, error } = await QD.supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          QD.showToast(error.message, 'error');
+          btn.disabled = false; btn.querySelector('span').textContent = 'Sign In →';
+        } else {
+          QD.showToast('Signed in successfully!', 'success');
+          const redir = new URLSearchParams(window.location.search).get('redirect') || 'orders.html';
+          setTimeout(() => window.location.href = redir, 1000);
+        }
+      } catch (err) {
+        QD.showToast('Connection error. Please try again.', 'error');
+        btn.disabled = false; btn.querySelector('span').textContent = 'Sign In →';
+      }
+    }
+
+    async function doSignUp() {
+      if (!QD.supabase) return QD.showToast('Connection issue. Please refresh the page.', 'error');
+      const name = document.getElementById('suName').value;
+      const email = document.getElementById('suEmail').value;
+      const password = document.getElementById('suPassword').value;
+
+      if (!name || !email || !password) return QD.showToast('Please fill all fields', 'error');
+
+      const btn = document.getElementById('signupBtn');
+      btn.disabled = true; btn.querySelector('span').textContent = 'Creating account...';
+
+      try {
+        const { data, error } = await QD.supabase.auth.signUp({
+          email, password,
+          options: { data: { full_name: name } }
+        });
+
+        if (error) {
+          QD.showToast(error.message, 'error');
+          btn.disabled = false; btn.querySelector('span').textContent = 'Create Account →';
+        } else {
+          QD.showToast('Success! Please check your email to confirm.', 'success');
+          btn.disabled = false; btn.querySelector('span').textContent = 'Create Account →';
+        }
+      } catch (err) {
+        QD.showToast('Signup failed. Please try again.', 'error');
+        btn.disabled = false; btn.querySelector('span').textContent = 'Create Account →';
+      }
+    }
+
+    async function doReset() {
+      const email = document.getElementById('resetEmail').value;
+      if (!email) return QD.showToast('Please enter email', 'error');
+      const { error } = await QD.supabase.auth.resetPasswordForEmail(email);
+      if (error) QD.showToast(error.message, 'error');
+      else QD.showToast('Reset link sent!', 'success');
+    }
+
+    // ── BG ANIMATION ──
+    (function() {
+      const cv = document.getElementById('bg-canvas');
+      const rend = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
+      rend.setSize(innerWidth, innerHeight);
+      const sc = new THREE.Scene(), cam = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, .1, 1000);
+      cam.position.z = 5;
+      const N = 1000, pos = new Float32Array(N * 3);
+      for (let i = 0; i < N; i++) { pos[i*3] = (Math.random()-.5)*20; pos[i*3+1] = (Math.random()-.5)*20; pos[i*3+2] = (Math.random()-.5)*10; }
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+      const pts = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xf4a850, size: .015, transparent: true, opacity: .3 }));
+      sc.add(pts);
+      (function a() { requestAnimationFrame(a); pts.rotation.y += .002; rend.render(sc, cam); })();
+    })();
+  </script>
+</body>
+</html>

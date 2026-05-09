@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Disallow admin and private pages
+Disallow: /admin.html
+Disallow: /orders.html
+
+# Sitemap location
+Sitemap: https://www.quantumdigitizing.com/sitemap.xml
