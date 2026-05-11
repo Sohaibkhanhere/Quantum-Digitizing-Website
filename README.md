@@ -1,64 +1,62 @@
-# Quantum Digitizing — Setup Guide
+# Supabase clients for use in SSR frameworks
 
-## Files in This Package
-- `index.html` — Main landing page (same stunning aesthetic as Patch Vision)
-- `supabase-config.js` — Database config (update with your credentials)
-- `supabase-setup.sql` — Run this in your new Supabase project
+> **Package Consolidation Notice**: This package replaces the deprecated `@supabase/auth-helpers-*` packages. All framework-specific auth-helpers packages have been consolidated into `@supabase/ssr` for better maintenance and consistency.
 
----
+## Overview
 
-## Step 1 — Update Your Info
+This package provides a framework-agnostic way to use the [Supabase JavaScript library](https://supabase.com/docs/reference/javascript/introduction) in server-side rendering (SSR) frameworks.
 
-Search and replace these placeholders in `index.html` and `supabase-config.js`:
+## Installation
 
-| Placeholder | Replace With |
-|---|---|
-| `923001234567` | Your actual WhatsApp number (with country code, no +) |
-| `quantumdigitizing@gmail.com` | Your actual email address |
-| `https://instagram.com/quantumdigitizing` | Your Instagram URL |
-| `https://facebook.com/quantumdigitizing` | Your Facebook URL |
+```bash
+npm i @supabase/ssr
+```
 
----
+## Deprecated Packages
 
-## Step 2 — Create New Supabase Project
+The following packages have been deprecated and consolidated into `@supabase/ssr`:
 
-1. Go to https://supabase.com/dashboard
-2. Click **New Project**
-3. Name it: `quantum-digitizing`
-4. Copy your **Project URL** and **anon public key**
-5. Paste them into `supabase-config.js`
+- `@supabase/auth-helpers-nextjs` → Use `@supabase/ssr`
+- `@supabase/auth-helpers-react` → Use `@supabase/ssr`
+- `@supabase/auth-helpers-remix` → Use `@supabase/ssr`
+- `@supabase/auth-helpers-sveltekit` → Use `@supabase/ssr`
 
----
+If you're currently using any of these packages, please update your dependencies to use `@supabase/ssr` directly.
 
-## Step 3 — Run the SQL
+## Documentation
 
-1. In your Supabase dashboard → **SQL Editor**
-2. Click **New Query**
-3. Paste the contents of `supabase-setup.sql`
-4. Click **Run**
+Please refer to the [official server-side rendering guides](https://supabase.com/docs/guides/auth/server-side) for the latest best practices on using this package in your SSR framework of choice.
 
----
+## Known patterns and limitations
 
-## Step 4 — Copy Auth, Orders, Admin Pages
+### `getSession()` vs `getUser()` vs `getClaims()`
 
-When you're ready, I can also create for Quantum Digitizing:
-- `auth.html` — Login/Signup page
-- `orders.html` — Customer dashboard  
-- `admin.html` — Admin panel
-- `checkout.html` — Order & payment flow
+`getSession()` returns the session directly from cookies — no network call is
+made. The user object it contains is **not verified by the Auth server** and
+must not be used for authorization decisions; a malicious client could craft a
+cookie with a spoofed user ID. **Do not use `getSession()` for authorization decisions.**
 
-Just ask and we'll build each page!
+`getClaims()` validates the access token either locally (using the project's
+JWKS endpoint for asymmetric keys) or by calling the Auth server, and returns
+the verified JWT claims. Use it when you need to gate access to resources but
+don't need a fresh user record from the database.
 
----
+`getUser()` contacts the Supabase Auth server on every call and returns the
+most up-to-date user record, including any changes made since the token was
+issued. Use it when you need fresh user data (e.g. checking current roles,
+email, or whether the session is still active server-side).
 
-## What's Different from Patch Vision
+### Concurrent requests with the same expired session
 
-| Patch Vision | Quantum Digitizing |
-|---|---|
-| `PATCH VISION` branding | `QUANTUM DIGITIZING` branding |
-| `patchvision@gmail.com` | Your QD email |
-| Patch Vision social links | QD social links |
-| Patch Vision Supabase DB | NEW separate QD Supabase DB |
-| Patch Vision WhatsApp | QD WhatsApp |
+Supabase refresh tokens are single-use. If two requests arrive simultaneously
+with the same expired session cookie (e.g. from two browser tabs opening at
+the same time), both will attempt a token refresh. The second request's
+refresh will fail because the token was already consumed by the first. The
+second request will receive `session: null` until the browser syncs the
+updated cookie from the first response.
 
-The design DNA, animations, and structure are the same — just fully rebranded.
+The **middleware pattern** mitigates this for the common case: middleware runs
+once per navigation and refreshes the session before the page renders, so
+subsequent requests within the same navigation see a valid token. For parallel
+requests (e.g. parallel `fetch()` calls from the client), handle `null`
+sessions gracefully and retry or re-authenticate as needed.

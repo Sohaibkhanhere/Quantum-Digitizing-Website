@@ -10,11 +10,29 @@
   <meta property="og:title" content="Portfolio — Quantum Digitizing Work">
   <meta property="og:description" content="Browse our embroidery digitizing, vector art and custom patch portfolio.">
   <meta property="og:url" content="https://www.quantumdigitizing.com/portfolio.html">
-  <meta property="og:image" content="https://www.quantumdigitizing.com/pictures/Quantum_digitizing_Logo.png">
+  <meta property="og:image" content="https://www.quantumdigitizing.com/images/Quantum_digitizing_Logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="css/main.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #151c24;
+      --bg2: #111820;
+      --bg3: #0e151d;
+      --white: #f0eee8;
+      --silver: #b8bcc8;
+      --gold: #f4a850;
+      --gold2: #ffc070;
+      --steel: #d0d4e0;
+      --dim: #3a3c48;
+      --border: rgba(244, 168, 80, .08);
+      --border2: rgba(244, 168, 80, .16);
+      --glass: rgba(255, 255, 255, 0.04);
+      --gold-semi: rgba(244, 168, 80, 0.35);
+      --fb: 'Bebas Neue', sans-serif;
+      --fr: 'Rajdhani', sans-serif;
+      --fm: 'Space Mono', monospace;
+    }
     .port-hero {
       padding: 180px 0 80px;
       text-align: center;
@@ -173,7 +191,7 @@
     /* FOOTER */
     footer{border-top:1px solid rgba(244,168,80,.08);padding:60px;background:#0e151d;}
     .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-bottom:40px;}
-    .footer-brand-name{font-family:var(--fb);font-size:clamp(28px,3vw,44px);color:transparent;-webkit-text-stroke:1px rgba(244,168,80,.28);letter-spacing:2px;line-height:1;margin-bottom:14px;}
+    .footer-brand-name{font-family:var(--fb);font-size:clamp(28px,3vw,44px);color:rgba(244,168,80,0.35);letter-spacing:2px;line-height:1;margin-bottom:14px;}
     .footer-desc{font-family:var(--fr);font-size:14px;color:var(--steel);line-height:1.7;margin-bottom:16px;}
     .footer-col-title{font-family:var(--fm);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
     .footer-col-link{display:block;font-family:var(--fr);font-size:14px;color:var(--steel);text-decoration:none;margin-bottom:10px;transition:color .2s;}
@@ -197,7 +215,7 @@
   <!-- NAV -->
   <nav id="mainNav">
     <a href="index.html" class="nav-logo">
-      <img src="pictures/Quantum_digitizing_Logo.png" alt="Quantum Digitizing" style="height: 50px; width: auto; object-fit: contain;">
+      <img src="images/Quantum_digitizing_Logo.png" alt="Quantum Digitizing" style="height: 50px; width: auto; object-fit: contain;">
     </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
@@ -334,13 +352,13 @@
       const demoItems = [
         { title:'Cap Logo Digitizing', category:'Digitizing', image_url:'https://images.unsplash.com/photo-1588850561407-ed78c282e89b?w=600&q=85', description:'Structured cap with left-chest logo digitized for Brother machine.' },
         { title:'Jacket Back Design', category:'Digitizing', image_url:'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=600&q=85', description:'Large back piece digitized with 85,000 stitches for varsity jacket.' },
-        { title:'Company Logo Vector', category:'Vector', image_url:'https://images.unsplash.com/photo-1626785774625-ddcddc3445e9?w=600&q=85', description:'Clean vector recreation from low-res JPEG for print & embroidery.' },
-        { title:'Sports Team Patch', category:'Patches', image_url:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=85', description:'Custom 3" embroidered patch with Velcro backing for sports uniforms.' },
-        { title:'Polo Shirt Embroidery', category:'Apparel', image_url:'https://images.unsplash.com/photo-1503341338985-95ad5a5e6949?w=600&q=85', description:'Corporate polo with small left-chest embroidered logo, 5,000 stitches.' },
-        { title:'Military Unit Insignia', category:'Patches', image_url:'https://images.unsplash.com/photo-1574120235036-cbeec83d4b50?w=600&q=85', description:'Complex military insignia digitized with metallic threads.' },
-        { title:'Brand Logo Redraw', category:'Vector', image_url:'https://images.unsplash.com/photo-1558618047-f5d0ed6e3879?w=600&q=85', description:'Full vector recreation in AI and EPS from a hand-drawn sketch.' },
+        { title:'Company Logo Vector', category:'Vector', image_url:'https://images.unsplash.com/photo-1626785774573-4b799315345d?w=600&q=85', description:'Clean vector recreation from low-res JPEG for print & embroidery.' },
+        { title:'Sports Team Patch', category:'Patches', image_url:'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600&q=85', description:'Custom 3" embroidered patch with Velcro backing for sports uniforms.' },
+        { title:'Polo Shirt Embroidery', category:'Apparel', image_url:'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=600&q=85', description:'Corporate polo with small left-chest embroidered logo, 5,000 stitches.' },
+        { title:'Military Unit Insignia', category:'Patches', image_url:'https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?w=600&q=85', description:'Complex military insignia digitized with metallic threads.' },
+        { title:'Brand Logo Redraw', category:'Vector', image_url:'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=600&q=85', description:'Full vector recreation in AI and EPS from a hand-drawn sketch.' },
         { title:'Hoodie Brand Design', category:'Apparel', image_url:'https://images.unsplash.com/photo-1556821840-3a63f15732ce?w=600&q=85', description:'Front & back design for streetwear brand, embroidered on premium hoodie.' },
-        { title:'School Logo Digitizing', category:'Digitizing', image_url:'https://images.unsplash.com/photo-1562322140-8baeececf3df?w=600&q=85', description:'School crest digitized for staff uniform shirts with fine detail.' },
+        { title:'School Logo Digitizing', category:'Digitizing', image_url:'https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=600&q=85', description:'School crest digitized for staff uniform shirts with fine detail.' },
       ];
 
       const grid = document.getElementById('portfolioGrid');

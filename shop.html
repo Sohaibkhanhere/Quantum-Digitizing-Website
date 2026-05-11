@@ -10,11 +10,29 @@
   <meta property="og:title" content="Shop — Quantum Digitizing Services">
   <meta property="og:description" content="Browse our embroidery digitizing, vector art, custom patches and apparel services.">
   <meta property="og:url" content="https://www.quantumdigitizing.com/shop.html">
-  <meta property="og:image" content="https://www.quantumdigitizing.com/pictures/Quantum_digitizing_Logo.png">
+  <meta property="og:image" content="https://www.quantumdigitizing.com/images/Quantum_digitizing_Logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="css/main.css">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #151c24;
+      --bg2: #111820;
+      --bg3: #0e151d;
+      --white: #f0eee8;
+      --silver: #b8bcc8;
+      --gold: #f4a850;
+      --gold2: #ffc070;
+      --steel: #d0d4e0;
+      --dim: #3a3c48;
+      --border: rgba(244, 168, 80, .08);
+      --border2: rgba(244, 168, 80, .16);
+      --glass: rgba(255, 255, 255, 0.04);
+      --gold-semi: rgba(244, 168, 80, 0.35);
+      --fb: 'Bebas Neue', sans-serif;
+      --fr: 'Rajdhani', sans-serif;
+      --fm: 'Space Mono', monospace;
+    }
     .shop-hero {
       padding: 180px 0 100px;
       background: radial-gradient(circle at top right, rgba(244, 168, 80, 0.05), transparent 40%);
@@ -140,7 +158,7 @@
     /* FOOTER */
     footer{border-top:1px solid rgba(244,168,80,.08);padding:60px;background:#0e151d;}
     .footer-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:40px;margin-bottom:40px;}
-    .footer-brand-name{font-family:var(--fb);font-size:clamp(28px,3vw,44px);color:transparent;-webkit-text-stroke:1px rgba(244,168,80,.28);letter-spacing:2px;line-height:1;margin-bottom:14px;}
+    .footer-brand-name{font-family:var(--fb);font-size:clamp(28px,3vw,44px);color:rgba(244,168,80,0.35);letter-spacing:2px;line-height:1;margin-bottom:14px;}
     .footer-desc{font-family:var(--fr);font-size:14px;color:var(--steel);line-height:1.7;margin-bottom:16px;}
     .footer-col-title{font-family:var(--fm);font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
     .footer-col-link{display:block;font-family:var(--fr);font-size:14px;color:var(--steel);text-decoration:none;margin-bottom:10px;transition:color .2s;}
@@ -165,7 +183,7 @@
   <!-- NAV -->
   <nav id="mainNav">
     <a href="index.html" class="nav-logo">
-      <img src="pictures/Quantum_digitizing_Logo.png" alt="Quantum Digitizing" style="height: 50px; width: auto; object-fit: contain;">
+      <img src="images/Quantum_digitizing_Logo.png" alt="Quantum Digitizing" style="height: 50px; width: auto; object-fit: contain;">
     </a>
     <div class="nav-links">
       <a href="index.html" class="nav-link">Home</a>
@@ -243,6 +261,9 @@
     document.addEventListener('DOMContentLoaded', async () => {
       initCursor();
       checkAuth();
+      // Show demo services immediately, load real ones in background
+      const shopContent = document.getElementById('shopContent');
+      showDemoServices(shopContent);
       loadShop();
     });
 
